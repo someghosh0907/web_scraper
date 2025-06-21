@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Make & Model Suggestions</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 500px; margin: 20px auto; padding: 20px; }
+        input, select { width: 100%; padding: 8px; margin: 8px 0; }
+        .suggestions { border: 1px solid #ccc; max-height: 150px; overflow-y: auto; display: none; }
+        .suggestions div { padding: 8px; cursor: pointer; border-bottom: 1px solid #eee; }
+        .suggestions div:hover { background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h2>Car Make & Model Suggestions</h2>
+    <label for="make">Car Make:</label>
+    <input type="text" id="make" placeholder="Enter car make">
+    <div id="makeSuggestions" class="suggestions"></div>
+
+    <label for="model">Car Model:</label>
+    <input type="text" id="model" placeholder="Enter car model" disabled>
+    <div id="modelSuggestions" class="suggestions"></div>
+
+    <script>
+        // Data
+        const cars = {
+            "Toyota": ["Camry", "Supra", "Fortuner"],
+            "Honda": ["Accord", "Civic"],
+            "Ford": ["Mustang", "Taurus", "F-150"],
+            "Chevrolet": ["Camaro", "Corvette", "TrailBlazer"]
+        };
+
+        // DOM elements
+        const makeInput = document.getElementById('make');
+        const makeSuggestions = document.getElementById('makeSuggestions');
+        const modelInput = document.getElementById('model');
+        const modelSuggestions = document.getElementById('modelSuggestions');
+
+        // Show suggestions for make
+        makeInput.addEventListener('input', function() {
+            const value = this.value.toLowerCase();
+            makeSuggestions.innerHTML = '';
+            if (value === '') {
+                makeSuggestions.style.display = 'none';
+                return;
+            }
+            const matches = Object.keys(cars).filter(make => 
+                make.toLowerCase().includes(value)
+            );
+            if (matches.length) {
+                matches.forEach(make => {
+                    const div = document.createElement('div');
+                    div.textContent = make;
+                    div.onclick = () => {
+                        makeInput.value = make;
+                        makeSuggestions.style.display = 'none';
+                        modelInput.disabled = false;
+                        updateModelSuggestions(make);
+                    };
+                    makeSuggestions.appendChild(div);
+                });
+                makeSuggestions.style.display = 'block';
+            } else {
+                makeSuggestions.style.display = 'none';
+            }
+        });
+
+        // Show suggestions for model
+        function updateModelSuggestions(make) {
+            modelInput.value = '';
+            modelInput.addEventListener('input', function() {
+                const value = this.value.toLowerCase();
+                modelSuggestions.innerHTML = '';
+                if (value === '') {
+                    modelSuggestions.style.display = 'none';
+                    return;
+                }
+                const models = cars[make] || [];
+                const matches = models.filter(model => 
+                    model.toLowerCase().includes(value)
+                );
+                if (matches.length) {
+                    matches.forEach(model => {
+                        const div = document.createElement('div');
+                        div.textContent = model;
+                        div.onclick = () => {
+                            modelInput.value = model;
+                            modelSuggestions.style.display = 'none';
+                        };
+                        modelSuggestions.appendChild(div);
+                    });
+                    modelSuggestions.style.display = 'block';
+                } else {
+                    modelSuggestions.style.display = 'none';
+                }
+            });
+        }
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!makeSuggestions.contains(e.target) && e.target !== makeInput) {
+                makeSuggestions.style.display = 'none';
+            }
+            if (!modelSuggestions.contains(e.target) && e.target !== modelInput) {
+                modelSuggestions.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
