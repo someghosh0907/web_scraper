@@ -28,6 +28,12 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*','web-scraper-3-we1q.onrender.com']
 
+CSRF_COOKIE_SECURE = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://web-scraper-6.onrender.com",
+]
+
 
 # Application definition
 
