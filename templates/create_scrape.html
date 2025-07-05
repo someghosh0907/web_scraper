@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New Scrapes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 0;
+        }
+        .dashboard {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 1000px;
+        }
+        .dashboard h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .dashboard p {
+            text-align: center;
+        }
+        .dashboard form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .dashboard label {
+            font-weight: bold;
+        }
+        .dashboard input, .dashboard select, .dashboard textarea {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .dashboard .row {
+            display: flex;
+            gap: 15px;
+        }
+        .dashboard .col {
+            flex: 1;
+        }
+        .dashboard button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .dashboard button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h2>Create New Scrapes</h2>
+        <p>Fill in the details below to set up a new scraping job.</p>
+        <form method="post" action="{% url 'create_scrape' %}">
+            {% csrf_token %}
+            <label for="scraper_name">Scraper Name:</label>
+            <input type="text" id="scraper_name" name="scraper_name" required>
+
+            <label for="website">Website to Scrape:</label>
+            <select id="website" name="website" required>
+                <option value="">Select a website</option>
+                <option value="All">All</option>
+                <option value="carswitch">CarSwitch</option>
+                <option value="opensooq">Opensooq</option>
+            </select>
+
+            <div class="row">
+                <div class="col">
+                    <label for="make">Make of Car:</label>
+                    <input type="text" id="make" name="make" required>
+                </div>
+                <div class="col">
+                    <label for="model">Model of Car:</label>
+                    <input type="text" id="model" name="model" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="make">Country</label>
+                    <select id="country" name="country">
+                        <option value="All">All</option>
+                        <option value="KSA">KSA</option>
+                        <option value="UAE">UAE</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="make">City</label>
+                    <select id="city" name="city">
+                        <option value="All">All</option>
+                        <option value="1">Abu Dhabi</option>
+                        <option value="2">Ajman</option>
+                        <option value="3">Dubai</option>
+                        <option value="4">Fujairah</option>
+                        <option value="5">Ras al-Khaimah</option>
+                        <option value="6">Sharjah</option>
+                        <option value="7">Umm Al Quwain</option>
+                        <option value="8">Al Ain</option>
+                        <option value="9">Riyadh</option>
+                        <option value="10">Jeddah</option>
+                        <option value="11">Dammam</option>
+                        <option value="12">Al Khobar</option>
+                        <option value="13">Mecca</option>
+                        <option value="14">AlMadina</option>
+                        <option value="27">Arar</option>
+                        <option value="29">Qasim / Breda</option>
+                        <option value="33">Tabouk</option>
+                        <option value="34">Al Taif </option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit">Create Scrape</button>
+        </form>
+    </div>
+</body>
+</html>

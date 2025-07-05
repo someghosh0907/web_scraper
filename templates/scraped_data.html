@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scraped Data Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 0;
+        }
+        .dashboard {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 2000px;
+        }
+        .dashboard h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        /* .dashboard p {
+            text-align: center;
+        } */
+        .dashboard table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .dashboard th, .dashboard td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .dashboard th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .dashboard tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .dashboard tr:hover {
+            background-color: #f1f1f1;
+        }
+        .dashboard img {
+            max-width: 80px;
+            max-height: 60px;
+            border-radius: 4px;
+        }
+        .dashboard input, .dashboard select, .dashboard textarea {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .dashboard .btn {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h2>Scraped Data Dashboard</h2>
+        <p>All scraped listings are displayed below.</p>
+
+        <p style="display: flex; justify-content: center; gap: 50px; flex-grow: 1;">Filter The Data</p>
+        {% if scraped_data %}
+        <div>
+            <form method="post" action="{% url 'get_scraped_data' %}?make={{make}}&model={{model}}&website={{website}}&uuid={{uuid}}&country={{country}}">
+                {% csrf_token %}
+                <div id="filters" style="display: flex; justify-content: center; gap: 50px; flex-grow: 1;">
+                    <div>
+                        <p><b>Make</b></p>
+                        <input placeholder="Enter make" type="text" id="make-filter" placeholder="Enter make" name="make-filter"></input>
+                    </div>
+                    <div>
+                        <p><b>Model</b></p>
+                        <input placeholder="Enter model" type="text" id="model-filter" placeholder="Enter model" name="model-filter"></input>
+                    </div>
+                    <div>
+                        <p><b>Trim</b></p>
+                        <input placeholder="Enter trim" type="text" id="trim-filter" placeholder="Enter trim" name="trim-filter"></input>
+                    </div>
+                    <div>
+                        <p><b>Model Year</b></p>
+                        <input placeholder="Enter model year" type="text" id="model-year-filter" placeholder="Enter model year" name="model-year-filter"></input>
+                    </div>
+                    <div>
+                        <p><b>City</b></p>
+                        <input placeholder="Enter city" type="text" id="city-filter" placeholder="Enter city" name="city-filter"></input>
+                    </div>
+                     <div>
+                        <p><b>Exterior Color</b></p>
+                        <input placeholder="Enter exterior color" type="text" id="color-filter" placeholder="Enter color" name="color-filter"></input>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: center; gap: 50px; flex-grow: 1;">
+                    <div>
+                        <p><b>Fuel Type</b></p>
+                        <input placeholder="Enter fuel type" type="text" id="fuel type " name="fuel-type"></input>
+                    </div>
+                    <div>
+                        <p><b>Transmission</b></p>
+                        <input placeholder="Enter transmission" type="text" id="transmission" name="transmission"></input>
+                    </div>
+                    <div>
+                        <p><b>Vehicle Listing Date</b></p>
+                        <input placeholder="Enter vehicle listing date" type="text" id="vehicle-listing-date " name="vehicle-listing-date-filter"></input>
+                    </div>
+                    <div>
+                        <p><b>Vehicle Exit Date</b></p>
+                        <input placeholder="Enter vehicle exit date" type="text" id="vehicle-exit-date-filter" placeholder="Enter vehicle exit date" name="vehicle-exit-date-filter"></input>
+                    </div>
+                    <div>
+                        <p><b>Listing Period</b></p>
+                        <input placeholder="Enter listing period" type="text" id="price-filter" placeholder="Enter price" name="price-filter"></input>
+                    </div>
+                    <div>
+                        <p><b>Seller Type</b></p>
+                        <input placeholder="Enter seller type" type="text" id="seller-type-filter" placeholder="Enter seller type" name="seller-type-filter"></input>
+                    </div>
+                </div>
+                <div style="display: flex;justify-content: center;gap: 20px;">
+                    <h2>Mileage</h2>
+                    <div>
+                        <label for="mileage-range-low">Mileage (Min):</label>
+                        <input type="range" id="mileage-range-low" name="mileage-range-low"
+                               min="0" max="200000" step="1000" value="0">
+                        <span id="mileage-value-low">0</span> km
+                        <input type="hidden" id="mileage-hidden-low" name="mileage-hidden-low" value="0">
+                    </div>
+                    <div>
+                        <label for="mileage-range-high">Mileage (Max):</label>
+                        <input type="range" id="mileage-range-high" name="mileage-range-high"
+                               min="0" max="200000" step="1000" value="0" style="direction: rtl; transform: rotate(180deg);">
+                        <span id="mileage-value-high">0</span> km
+                        <input type="hidden" id="mileage-hidden-high" name="mileage-hidden-high" value="0">
+                    </div>
+                </div>
+                <div style="display: flex;justify-content: center;gap: 20px;">
+                    <h2>Price</h2>
+                    <div>
+                        <label for="price-range-low">Price (Min):</label>
+                        <input type="range" id="price-range-low" name="price-range-low"
+                               min="0" max="200000" step="1000" value="0">
+                        <span id="price-value-low">0</span>
+                        <input type="hidden" id="price-hidden-low" name="price-hidden-low" value="0">
+                    </div>
+                    <div>
+                        <label for="price-range-high">Price (Max):</label>
+                        <input type="range" id="price-range-high" name="price-range-high"
+                               min="0" max="200000" step="1000" value="0" style="direction: rtl; transform: rotate(180deg);">
+                        <span id="price-value-high">0</span>
+                        <input type="hidden" id="price-hidden-high" name="price-hidden-high" value="0">
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: end; padding-right: 280px; padding-top: 40px;">
+                    <button class="btn" type="submit" url><b>Filter</b></button>
+                </div>
+            </form>
+        </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sl No.</th>
+                        <th>Image</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Trim</th>
+                        <th>Price</th>
+                        <th>Model Year</th>
+                        <th>City</th>
+                        <th>Mileage(in Km)</th>
+                        <th>Exterior Color</th>
+                        <th>Fuel Type</th>
+                        <th>Transmission</th>
+                        <th>Vehicle Listing Date</th>
+                        <th>Vehicle Exit Date</th>
+                        <th>Listing Period</th>
+                        <th>Seller Type</th>
+                        <th>Website Url</th>
+                        <!-- <th>Mileage</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in scraped_data %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            {% if item.image_url %}
+                                <img src="{{ item.image_url }}" alt="{{ item.model }}">
+                            {% else %}
+                                No image
+                            {% endif %}
+                        </td>
+                        <td>{{ item.make }}</td>
+                        <td>{{ item.model }}</td>
+                        <td>{{ item.trim }}</td>
+                        <td>{{ item.currency }} {{ item.price }}</td>
+                        <td>{{ item.year }}</td>
+                        <td>{{ item.city }}</td>
+                        <td>{{ item.mileage }} Km</td>
+                        <td>{{ item.color }}</td>
+                        <td>{{ item.fuel_type }}</td>
+                        <td>{{ item.transmission }}</td>
+                        <td>{{ item.vehicle_listing_date }}</td>
+                        <td>{{ item.vehicle_exit_date }}</td>
+                        <td>-</td>
+                        <td>{{ item.seller_type }}</td>
+                        <td><a href="{{ item.website_url }}">{{ item.website_url }}</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No scraped data available.</p>
+        {% endif %}
+    </div>
+</body>
+<script>
+    // Mileage sliders
+    const mileageRangeLow = document.getElementById('mileage-range-low');
+    const mileageValueLow = document.getElementById('mileage-value-low');
+    const mileageHiddenLow = document.getElementById('mileage-hidden-low');
+
+    const mileageRangeHigh = document.getElementById('mileage-range-high');
+    const mileageValueHigh = document.getElementById('mileage-value-high');
+    const mileageHiddenHigh = document.getElementById('mileage-hidden-high');
+    const mileageMax = parseInt(mileageRangeHigh.max);
+
+    const priceRangeLow = document.getElementById('price-range-low');
+    const priceValueLow = document.getElementById('price-value-low');
+    const priceHiddenLow = document.getElementById('price-hidden-low');
+
+    const priceRangeHigh = document.getElementById('price-range-high');
+    const priceValueHigh = document.getElementById('price-value-high');
+    const priceHiddenHigh = document.getElementById('price-hidden-high');
+    const priceMax = parseInt(priceRangeHigh.max);
+
+    mileageRangeLow.addEventListener('input', function() {
+        mileageValueLow.textContent = this.value;
+        mileageHiddenLow.value = this.value;
+    });
+    mileageRangeHigh.addEventListener('input', function() {
+        const inverted = mileageMax - parseInt(this.value);
+        mileageValueHigh.textContent = inverted;
+        mileageHiddenHigh.value = inverted;
+    });
+
+    priceRangeLow.addEventListener('input', function() {
+        priceValueLow.textContent = this.value;
+        priceHiddenLow.value = this.value;
+    });
+    priceRangeHigh.addEventListener('input', function() {
+        const inverted = priceMax - parseInt(this.value);
+        priceValueHigh.textContent = inverted;
+        priceHiddenHigh.value = inverted;
+    });
+    // Initialize on page load
+    priceValueLow.textContent = priceRangeLow.value;
+    priceHiddenLow.value = priceRangeLow.value;
+    priceValueHigh.textContent = priceMax - parseInt(priceRangeHigh.value);
+    priceHiddenHigh.value = priceMax - parseInt(priceRangeHigh.value);
+    // Initialize on page load
+    mileageValueLow.textContent = mileageRangeLow.value;
+    mileageHiddenLow.value = mileageRangeLow.value;
+    mileageValueHigh.textContent = mileageMax - parseInt(mileageRangeHigh.value);
+    mileageHiddenHigh.value = mileageMax - parseInt(mileageRangeHigh.value);
+</script>
+</html>
