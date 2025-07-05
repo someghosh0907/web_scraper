@@ -32,7 +32,7 @@ CSRF_COOKIE_SECURE = True
 
 CSRF_TRUSTED_ORIGINS = [
     "https://altawkilat-scrapers-ngwk.onrender.com",
-    "web-scraper-6-izp7.onrender.com"
+    "https://web-scraper-6-izp7.onrender.com"
 ]
 
 # Application definition
