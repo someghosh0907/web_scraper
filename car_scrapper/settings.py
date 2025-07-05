@@ -26,12 +26,13 @@ SECRET_KEY = 'django-insecure-z5nlp^uk@)%c%%ar)6=zt$_*!*u$@y^$7m1tbb1(ekl*&ysfm9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["altawkilat-scrapers-ngwk.onrender.com",'*']
+ALLOWED_HOSTS = ["altawkilat-scrapers-ngwk.onrender.com","web-scraper-6-izp7.onrender.com",'*']
 
 CSRF_COOKIE_SECURE = True
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://altawkilat-scrapers-ngwk.onrender.com"
+    "https://altawkilat-scrapers-ngwk.onrender.com",
+    "web-scraper-6-izp7.onrender.com"
 ]
 
 # Application definition
