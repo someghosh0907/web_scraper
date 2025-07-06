@@ -565,6 +565,7 @@ def get_data_from_opensooq_uae(request, make=None, model=None,uuid=None,country=
             make=obj.get('Car_Make', ""),
             model= obj.get("Model", ""),
             trim=obj.get("Trim",""),
+            currency=obj.get("Currency",""),
             price=obj.get("Price",""),
             mileage=mileage,
             city=obj.get("City",""),
